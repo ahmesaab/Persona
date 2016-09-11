@@ -1,0 +1,40 @@
+Users
+	- id
+	- first_name
+	- last_name
+	- facebook_id
+	- user_name
+	- password
+
+Quizzes
+	- id
+	- owner_user_id
+	- name
+	- description
+	- creation_date
+	
+Questions
+	- id
+	- quiz_id
+	- content
+	- type
+	
+Answers
+	- id
+	- question_id
+	- content
+	- correct
+	
+UserQuestionSolution
+	- user_id
+	- question_id
+	- answer_id
+	- quiz_id
+	
+UserQuizSolution
+	- user_id
+	- quiz_id
+	- score
+	
+	
+	
