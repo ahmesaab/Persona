@@ -47,7 +47,7 @@ module.exports = {
     //Params: function to call when finished.
     //Callback Params :
     //  - err: error object or null if no errors
-    //  - quizzes: array of quiz objects defined in /models/Quiz.js
+    //  - quizzes: array of quiz objects defined in /models/quiz.js
     getAllQuizOfUser: function(userId,callback) {
         db.get(function ( err, connection){
             if (err){
