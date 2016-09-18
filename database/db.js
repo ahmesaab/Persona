@@ -11,12 +11,8 @@ var pool =  mysql.createPool({
     database: "personadb"
 });
 
-//pool.id = Math.random()*1000;
-
 module.exports = {
     get:function(callback){
-        //pool.id = Math.random()*1000;
-        //console.log(pool.id);
         pool.getConnection(function(err, connection){
             callback(err,connection);
         });

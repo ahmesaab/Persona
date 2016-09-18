@@ -43,6 +43,7 @@ module.exports = {
            }
        });
     },
+
     //Description: Get all quizzes of a specific user
     //Params: function to call when finished.
     //Callback Params :

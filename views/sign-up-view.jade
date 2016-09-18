@@ -1,0 +1,19 @@
+//
+   Created by Saab on 9/18/2016.
+
+doctype html
+html
+    head
+        title Sign Up
+    body
+        form(action='/signUp',method='post')
+            div
+                | First Name :
+                input#first-name(name='firstName')
+            div
+                | Last Name :
+                input#last-name(name='lastName')
+            div
+                | User Name :
+                input#user-name(name='userName')
+            button SIGN UP!

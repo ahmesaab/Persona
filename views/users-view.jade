@@ -1,0 +1,9 @@
+doctype html
+html
+    head
+        title Application Users
+        link(rel='stylesheet', href='/stylesheets/users.css')
+    body
+        each user in users
+            div USER NO. #{user.id}
+                p=user.name
