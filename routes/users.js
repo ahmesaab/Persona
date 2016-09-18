@@ -1,17 +1,19 @@
+var service = require('../services/service.js');
 var express = require('express');
 var router = express.Router();
-var service = require('../services/service.js');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+// Get the Users from database as JSON Array
+router.get('/', function(req, res) {
 
-    // Get the Users from database
-    // and save it in users
-
-    service.getAllUsers(function(data)
+    service.getAllUsers(function(err,users)
     {
-       var users = [];
-       res.send(users);
+        if(err)
+        {
+            console.log("Error: "+err.message);
+            res.sendStatus(500);
+        }
+        else
+            res.send(users);
     });
 
 });
