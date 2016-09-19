@@ -1,7 +1,7 @@
 /**
  * Created by Saab on 9/13/2016.
  */
-
+/*
 var mysql =  require('mysql');
 
 var pool =  mysql.createPool({
@@ -17,5 +17,5 @@ module.exports = {
             callback(err,connection);
         });
     }
-};
+};*/
 
