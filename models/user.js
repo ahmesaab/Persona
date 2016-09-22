@@ -16,6 +16,7 @@ var user = function(id, firstName, lastName, facebookId, twitterId, googleId, us
 };
 
 user.prototype.save = function(callback){
+    var newUser = this;
     db.get(function(err, connection){
         if(err)
         {
@@ -23,9 +24,10 @@ user.prototype.save = function(callback){
         }
         else
         {
+
             connection.query('INSERT INTO Users (first_name, last_name, facebook_id, twitter_id, ' +
-                'google_id, user_name, password ) values (?,?,?,?,?,?,?)',[this.firstName, this.lastName,
-                this.facebookId, this.twitterId, this.googleId, this.userName, this.password],
+                'google_id, user_name, password ) values (?,?,?,?,?,?,?)',[newUser.firstName, newUser.lastName,
+                    newUser.facebookId, newUser.twitterId, newUser.googleId, newUser.userName, newUser.password],
                 function(err, res)
                 {
                     if(err)
@@ -34,7 +36,7 @@ user.prototype.save = function(callback){
                     }
                     else
                     {
-                        this.id = res.insertId;
+                        newUser.id = res.insertId;
                         callback(null);
                     }
                 })
