@@ -1,10 +1,10 @@
 /**
  * Created by Saab on 9/18/2016.
  */
-var db = require('../database/db.js');
+var db = require('../models/persistence/dbconnector.js');
 
 
-var user = function(id, firstName, lastName, facebookId, twitterId, googleId, userName, password){
+var User = function(id, firstName, lastName, facebookId, twitterId, googleId, userName, password){
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -15,8 +15,8 @@ var user = function(id, firstName, lastName, facebookId, twitterId, googleId, us
     this.password = password;
 };
 
-user.prototype.save = function(callback){
-    var newUser = this;
+User.prototype.save = function(callback){
+    var self = this;
     db.get(function(err, connection){
         if(err)
         {
@@ -24,10 +24,9 @@ user.prototype.save = function(callback){
         }
         else
         {
-
             connection.query('INSERT INTO Users (first_name, last_name, facebook_id, twitter_id, ' +
-                'google_id, user_name, password ) values (?,?,?,?,?,?,?)',[newUser.firstName, newUser.lastName,
-                    newUser.facebookId, newUser.twitterId, newUser.googleId, newUser.userName, newUser.password],
+                'google_id, user_name, password ) values (?,?,?,?,?,?,?)',[self.firstName, self.lastName,
+                    self.facebookId, self.twitterId, self.googleId, self.userName, self.password],
                 function(err, res)
                 {
                     if(err)
@@ -36,7 +35,7 @@ user.prototype.save = function(callback){
                     }
                     else
                     {
-                        newUser.id = res.insertId;
+                        self.id = res.insertId;
                         callback(null);
                     }
                 })
@@ -44,4 +43,4 @@ user.prototype.save = function(callback){
     });
 };
 
-module.exports = user;
+module.exports = User;

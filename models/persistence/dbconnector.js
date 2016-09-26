@@ -17,9 +17,6 @@ var pool      =    mysql.createPool({
 module.exports = {
     get:function(callback){
         pool.getConnection(function(err, connection){
-            connection.on('error', function(err) {
-                res.json({"code" : 100, "status" : "Error in connection database"});
-            });
             callback(err,connection);
         });
     }

@@ -49,7 +49,8 @@ module.exports = {
     //Callback Params :
     //  - err: error object or null if no errors
     //  - quizzes: array of quiz objects defined in /models/quiz.js
-    getAllQuizOfUser: function(userId,callback) {
+    getAllQuizOfUser: function(userId,callback)
+    {
         db.get(function ( err, connection){
             if (err){
                 callback(err, null);
@@ -64,5 +65,21 @@ module.exports = {
                 })
             }
         })
-    }
+    },
+
+    //Description: Get required data for Quizzes area in profile view
+    //Params: function to call when finished.
+    //Callback Params :
+    //  - err: error object or null if no errors
+    // - TODO: replace this line with a description of the returned data
+    getProfileViewDataComposite: function(userId,callback)
+    {},
+
+    //Description: Get required data for Quizzes area in profile view
+    //Params: function to call when finished.
+    //Callback Params :
+    //  - err: error object or null if no errors
+    // - TODO: replace this line with a description of the returned data
+    getProfileViewDataSeparate: function(userId,callback)
+    {}
 };

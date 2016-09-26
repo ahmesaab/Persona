@@ -57,4 +57,14 @@ router.post('/signUp', function(req, res, next) {
     });
 });
 
+// TODO: Mokhtar's Controller
+router.get('/doStuffComposite', function(req, res) {
+
+});
+
+// TODO: Samer's Controller
+router.get('/doStuffSeparate', function(req, res) {
+
+});
+
 module.exports = router;
