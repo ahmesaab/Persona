@@ -1,0 +1,25 @@
+//
+   Created by Mostafa on 9/26/2016.
+
+doctype html
+html
+    head
+        title My friends' statistics
+
+    body
+        div
+            table
+                thead
+                    tr: th Quiz Name
+                        th Top Solver
+                        th # of Questions/Quiz
+                        th # of Users Solved this Quiz
+                tbody
+                    each row in rows
+
+                        if row.userSolvedQuiz != 0
+                            tr
+                                td #{row.name}
+                                td #{row.topSolver}
+                                td #{row.questionPerQuiz}
+                                td #{row.userSolvedQuiz}

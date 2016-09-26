@@ -73,7 +73,25 @@ module.exports = {
     //  - err: error object or null if no errors
     // - TODO: replace this line with a description of the returned data
     getProfileViewDataComposite: function(userId,callback)
-    {},
+    {
+
+        db.get(function(err, connection){
+            if(err){
+                callback(err,null);
+            }else{
+                var queryString = "SELECT distinct qz.name,qz.id,count(q.id) as 'questionPerQuiz',(select count(uqs.quiz_id) from userquizsolution uqs where qz.id = uqs.quiz_id )as 'userSolvedQuiz',(select  max(uqs.score) from userquizsolution uqs where qz.id = uqs.quiz_id )as 'maxScore',(SELECT user_name from users where id =  (  SELECT user_id from userquizsolution where qz.id=userquizsolution.quiz_id order by score DESC LIMIT 1 )) as 'topSolver' from quizzes qz INNER JOIN questions q ON q.quiz_id = qz.id and qz.owner_user_id=1 group by q.quiz_id";
+                connection.query(queryString, function(err, rows){
+                    if(err){
+                        callback(err,null);
+                    }else{
+                        var data = rows;
+                        callback(err,data);
+                    }
+                })
+            }
+
+        })
+    },
 
     //Description: Get required data for Quizzes area in profile view
     //Params: function to call when finished.
