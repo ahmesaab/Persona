@@ -6,6 +6,8 @@ var db = require('./../models/persistence/dbconnector.js');
 
 module.exports = {
 
+    // MY COMMENT
+
     //Description: Get all users from the database.
     //Params: function to call when finished.
     //Callback Params :
