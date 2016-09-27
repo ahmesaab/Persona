@@ -59,12 +59,15 @@ router.post('/signUp', function(req, res, next) {
 
 // TODO: Mokhtar's Controller
 router.get('/doStuffComposite', function(req, res) {
-    service.getProfileViewDataComposite(1,function (err,data) {
-        if(err){
+    service.getProfileViewDataComposite(req.query.id,function (err,data)
+    {
+        if(err)
+        {
             console.log(err);
             res.sendStatus(500);
-        }else{
-
+        }
+        else
+        {
             res.render("profile-composite-info-box",{rows:data});
         }
     })
