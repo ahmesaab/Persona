@@ -72,7 +72,7 @@ router.post('/signUp', function(req, res, next) {
 // Mokhtar's Controller
 router.get('/doStuffComposite', function(req, res) {
 
-    service.getProfileViewDataComposite(req.query.id,function (err,data)
+    service.getProfileViewDataComposite(req.query.userId,function (err,data)
     {
         if(err)
         {
@@ -86,6 +86,29 @@ router.get('/doStuffComposite', function(req, res) {
     })
 
 });
+
+// Mokhtar's Controller
+router.get('/quiz-details', function(req, res) {
+
+    if(req.query.edit) {
+        service.getQuizEditDetails(req.query.quizId, function (err, data) {
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            }
+            else {
+                res.render("quiz-details-view", {rows: data});
+            }
+        })
+    }
+    if(req.query.solve) {
+    }
+    if(req.query.preview) {
+    }
+
+
+    });
+
 
 // TODO: Samer's Controller
 router.get('/doStuffSeparate', function(req, res) {

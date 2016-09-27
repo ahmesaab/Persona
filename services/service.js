@@ -6,7 +6,6 @@ var db = require('./../models/persistence/dbconnector.js');
 
 module.exports = {
 
-    // MY COMMENT 2
 
     //Description: Get all users from the database.
     //Params: function to call when finished.
@@ -161,6 +160,40 @@ module.exports = {
 
 
 
+
+    },
+
+    //Description: Get required data for Quizzes area in edit/solve/preview view
+    //Params: function to call when finished.
+    //Callback Params :
+    //   - userID:
+    //  - err: error object or null if no errors
+    // - TODO: replace this line with a description of the returned data
+    getQuizEditDetails: function(quizId,callback)
+    {
+        db.get(function ( err, connection){
+            if (err){
+                callback(err, null);
+            }else{
+                connection.query("SELECT a.content as answer_content," +
+                    " a.content as is_correct_ans," +
+                    " q.id as question_id, " +
+                    " q.content as question_content" +
+                    " from answers a " +
+                    " JOIN questions q " +
+                    "ON " +
+                    "q.id = a.question_id and q.quiz_id=?",[quizId], function(err, rows){
+                        callback(err,rows);
+                });
+
+
+            }
+        })
+    },
+    getQuizSolveDetails: function(quizId,callback) {
+
+    },
+    getQuizPreviewDetails: function(quizId,callback) {
 
     }
 };
