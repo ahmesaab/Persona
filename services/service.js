@@ -81,5 +81,52 @@ module.exports = {
     //  - err: error object or null if no errors
     // - TODO: replace this line with a description of the returned data
     getProfileViewDataSeparate: function(userId,callback)
-    {}
+    {
+        db.get(function ( err, connection){
+            if (err){
+                callback(err, null);
+            }else{
+                connection.query("select name , id from Quizzes where owner_user_id ="+userId, function(err, rows){
+                    if(err){
+                        callback(err,null);
+                    }else{
+                        var out = rows;
+                        console.log(out);
+                        for(var i=0; i < rows.length;i++){
+                            var quizId = rows[i].id;
+
+                            connection.query("select count(*) from Questions where quiz_id =  "+quizId, function(err, rows){
+                                        if(err){
+                                            callback(err,null);
+                                        }else{
+                                            var out2 = rows;
+                                            console.log(out2+" loop #"+i);
+                                            callback(err,out2);
+                                        }
+                            });
+
+                            connection.query(" select count(*), MAX(score) as maxScore from UserQuizSolution " +
+                                        "where quiz_id = "+quizId, function(err, rows){
+                                        if(err){
+                                            callback(err,null);
+                                        }else{
+                                            var out3 = rows;
+                                            console.log(out3+"  loop #"+i);
+                                            callback(err,out3);
+                                }
+                            });
+                        }
+
+                        callback(err,out);
+                    }
+                });
+
+
+            }
+        })
+
+
+
+
+    }
 };

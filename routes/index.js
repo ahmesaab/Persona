@@ -64,6 +64,14 @@ router.get('/doStuffComposite', function(req, res) {
 
 // TODO: Samer's Controller
 router.get('/doStuffSeparate', function(req, res) {
+    var params = req.body;
+    service.getProfileViewDataSeparate(req.query.id, function(err, output) {
+        if(err){
+            console.log(err);
+        }else{
+            res.send(output);
+        }
+    })
 
 });
 
