@@ -5,7 +5,7 @@ var service = require('../services/service.js');
 var User = require('../models/user.js');
 
 // GET home page
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.render('index', { title: '7amada' });
 });
 
@@ -26,15 +26,21 @@ router.get('/users', function(req, res) {
 });
 
 // Get the Quizzes of a User from database as Quiz Array
-router.get('/getUserQuizzes', function(req, res, next) {
-  service.getAllQuizOfUser(req.query.id,function(err, quizzes){
-    if(err){
-      console.log(err);
-      res.sendStatus(500);
-    }else{
-      res.send(quizzes);
-    }
-  });
+router.get('/getUserQuizzes', function(req, res) {
+
+    service.getAllQuizOfUser(req.query.id,function(err, quizzes)
+    {
+        if(err)
+        {
+            console.log(err);
+            res.sendStatus(500);
+        }
+        else
+        {
+            res.send(quizzes);
+        }
+    });
+
 });
 
 // Get signUp page
@@ -44,8 +50,13 @@ router.get('/signUp', function(req, res, next) {
 
 // Post signUp page
 router.post('/signUp', function(req, res, next) {
-    var params = req.body;
-    var newUser = new User(null,params.firstName,params.lastName,null,null,null,params.userName);
+
+    var newUser = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        userName: req.body.userName
+    });
+
     newUser.save(function(err) {
         if(err)
         {
@@ -55,10 +66,12 @@ router.post('/signUp', function(req, res, next) {
         else
             res.send("User was created and has ID of "+newUser.id);
     });
+
 });
 
-// TODO: Mokhtar's Controller
+// Mokhtar's Controller
 router.get('/doStuffComposite', function(req, res) {
+
     service.getProfileViewDataComposite(req.query.id,function (err,data)
     {
         if(err)
@@ -71,6 +84,7 @@ router.get('/doStuffComposite', function(req, res) {
             res.render("profile-composite-info-box",{rows:data});
         }
     })
+
 });
 
 // TODO: Samer's Controller

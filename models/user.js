@@ -1,23 +1,24 @@
 /**
  * Created by Saab on 9/18/2016.
  */
+
 var db = require('../models/persistence/dbconnector.js');
 
-
-var User = function(id, firstName, lastName, facebookId, twitterId, googleId, userName, password){
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.facebookId = facebookId;
-    this.twitterId = twitterId;
-    this.googleId = googleId;
-    this.userName = userName;
-    this.password = password;
+var User = function(params){
+    this.id = params.id;
+    this.firstName = params.firstName;
+    this.lastName = params.lastName;
+    this.facebookId = params.facebookId;
+    this.twitterId = params.twitterId;
+    this.googleId = params.googleId;
+    this.userName = params.userName;
+    this.password = params.password;
 };
 
 User.prototype.save = function(callback){
     var self = this;
-    db.get(function(err, connection){
+    db.get(function(err, connection)
+    {
         if(err)
         {
             callback(err);
