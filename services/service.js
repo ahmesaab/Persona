@@ -3,6 +3,17 @@
  */
 
 var db = require('./../models/persistence/dbconnector.js');
+var async = require('async');
+
+function reformatForNow(array)
+{
+    var result = {};
+    for(var i=0;i<array.length;i++)
+    {
+        result[array[i].id] = {name:array[i].name};
+    }
+    return result;
+}
 
 module.exports = {
 
@@ -113,54 +124,98 @@ module.exports = {
     //Params: function to call when finished.
     //Callback Params :
     //  - err: error object or null if no errors
-    // - TODO: replace this line with a description of the returned data
+    //  - data: { quizzes: [ {id:{name,numOfQuestions,solved,highestScore}} ] }
     getProfileViewDataSeparate: function(userId,callback)
     {
-        db.get(function ( err, connection){
-            if (err){
+        db.get(function (err, connection)
+        {
+            if (err) {
                 callback(err, null);
-            }else{
-                connection.query("select name , id from Quizzes where owner_user_id ="+userId, function(err, rows){
-                    if(err){
-                        callback(err,null);
-                    }else{
-                        var out = rows;
-                        console.log(out);
-                        for(var i=0; i < rows.length;i++){
-                            var quizId = rows[i].id;
-
-                            connection.query("select count(*) from Questions where quiz_id =  "+quizId, function(err, rows){
-                                        if(err){
-                                            callback(err,null);
-                                        }else{
-                                            var out2 = rows;
-                                            console.log(out2+" loop #"+i);
-                                            callback(err,out2);
-                                        }
-                            });
-
-                            connection.query(" select count(*), MAX(score) as maxScore from UserQuizSolution " +
-                                        "where quiz_id = "+quizId, function(err, rows){
-                                        if(err){
-                                            callback(err,null);
-                                        }else{
-                                            var out3 = rows;
-                                            console.log(out3+"  loop #"+i);
-                                            callback(err,out3);
-                                }
-                            });
-                        }
-
-                        callback(err,out);
-                    }
-                });
-
-
             }
-        })
+            else
+            {
+                connection.query("select id,name from Quizzes where owner_user_id ="+userId,
+                    function(err, rows)
+                    {
+                        if(err) {
+                            callback(err,null);
+                        }
+                        else
+                        {
+                            if(rows.length==0)
+                                callback(err,{});
+                            var quizzes = reformatForNow(rows);
+                            var sum = 0;
+                            for (var quizId in quizzes)
+                            {
+                                (function(id){
+                                    connection.query("select count(*) as count from Questions where quiz_id=?",[id],
+                                        function(err, rows)
+                                        {
+                                                if(err){
+                                                    callback(err,null);
+                                                }else {
+                                                    quizzes[id].numberOfQuestions = rows[0].count;
+                                                    done();
+                                                }
+                                        })
+                                })(quizId);
+
+                                (function(id){
+                                    connection.query("select count(*) as solved, MAX(score) as maxScore " +
+                                        "from UserQuizSolution where quiz_id=?",[id],
+                                        function(err, rows)
+                                        {
+                                            if(err){
+                                                callback(err,null);
+                                            }else{
+                                                quizzes[id].solved = rows[0].solved;
+                                                quizzes[id].maxScore = rows[0].maxScore;
+                                                done();
+                                            }
+                                        });
+                                })(quizId);
+
+                                (function(id){
+                                    var queryString = ' select first_name as firstName, last_name as lastName from ' +
+                                        'Users where id = (select user_id from UserQuizSolution where score = '+
+                                        '(select MAX(score) from UserQuizSolution where quiz_id= ?) LIMIT 1)';
+                                    connection.query(queryString,[id],
+                                        function(err, rows)
+                                        {
+                                            if(err){
+                                                callback(err,null);
+                                            }else{
+                                                if (rows.length==0)
+                                                {
+                                                    quizzes[id].firstName = null;
+                                                    quizzes[id].lastName = null;
+                                                }
+                                                else
+                                                {
+                                                    quizzes[id].firstName = rows[0].firstName;
+                                                    quizzes[id].lastName = rows[0].lastName;
+                                                }
+                                                done();
+                                            }
+                                        });
+                                })(quizId);
 
 
 
+                                function done()
+                                {
+                                    sum++;
+                                    if(sum == rows.length*3)
+                                    {
+                                        callback(err,quizzes);
+                                    }
+                                }
+                            }
 
+                        }
+                    });
+            }
+        });
     }
 };

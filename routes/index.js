@@ -71,9 +71,10 @@ router.post('/signUp', function(req, res, next) {
 
 // Mokhtar's Controller
 router.get('/doStuffComposite', function(req, res) {
-
+    console.time("composite");
     service.getProfileViewDataComposite(req.query.id,function (err,data)
     {
+        console.timeEnd("composite");
         if(err)
         {
             console.log(err);
@@ -89,8 +90,9 @@ router.get('/doStuffComposite', function(req, res) {
 
 // TODO: Samer's Controller
 router.get('/doStuffSeparate', function(req, res) {
-    var params = req.body;
+    console.time("separate");
     service.getProfileViewDataSeparate(req.query.id, function(err, output) {
+        console.timeEnd("separate");
         if(err){
             console.log(err);
         }else{
